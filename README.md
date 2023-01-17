@@ -14,6 +14,7 @@ Main features:
 - authentication via API key
 - `regex` currency input validation
 - custom error handling
+- OOP where applicable
 
 ### Currency converter
 Currency rates are provided by an external API `https://wise.com/gb/currency-converter/`. 
