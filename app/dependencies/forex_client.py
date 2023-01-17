@@ -8,10 +8,6 @@ from app.settings import FOREX_BASE_URL
 from app.errors import BadRequest, ForexException
 
 
-"""
-https://fastapi.tiangolo.com/tutorial/handling-errors/
-"""
-
 # default query parameters
 PARAMS = {
     "length": 1,
@@ -136,4 +132,43 @@ async def historical_data(
         history.append(historical_output)
 
     return history
+
+
+async def average_rate(
+    from_currency: str,
+    to_currency: str,
+    duration: int
+) -> dict:
+    """
+    Get average conversion rate from the past X days
+    :param from_currency: Source currency code
+    :param to_currency: Target currency code
+    :param duration: X days
+    :return: average conversion rate from the past X days
+    """
+    validate_input(value=from_currency)
+    validate_input(value=to_currency)
+
+    # additional query parameters required for this API call
+    params = {
+        "source": from_currency,
+        "target": to_currency,
+        "length": duration,
+        "resolution": "daily",
+        "unit": "day"
+    }
+    forex_response = await forex_request(parameters=params)
+
+    # scrape required data from forex response
+    average = 0
+    for i in range(len(forex_response)):
+        mid_market_rate = forex_response[i].get("value")
+        average += mid_market_rate
+    average = round(average/len(forex_response), 4)
+
+    output_format = {
+        "average_rate": average,
+        "duration_in_days": duration
+    }
+    return output_format
 

@@ -21,6 +21,7 @@ Currency rates are provided by an external API `https://wise.com/gb/currency-con
 Supported operations are:
 - Convert currency
 - Get historical data of conversion rates
+- Get average conversion rate from the past X days
 
 ### Reverse engineering API
 The following steps had to be taken to obtain forex data:
@@ -59,8 +60,9 @@ at index page `/`.
 
 | Method | Endpoint | Description                                |
 |--------|----------|--------------------------------------------|
-| GET    | /convert | convert one currency into another currency |       |
+| GET    | /convert | convert one currency into another currency |       
 | GET    | /history | get historical exchange rates              |
+| GET    | /average | get average exchange rate from past X days |
 
 ## Status codes
 
@@ -103,3 +105,11 @@ GET `/convert?amount=1000&from_currency=USD&to_currency=PLN`
       "time":"2023-01-16 14:00:00"
    }
 ]
+```
+GET `average?from_currency=USD&to_currency=PLN&duration=30`
+```json
+{
+	"average_rate": 4.3832,
+	"duration_in_days": 30
+}
+```
