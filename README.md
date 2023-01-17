@@ -5,7 +5,7 @@ This is a mid-market currency converter API using FastAPI
 
 ### Motives
 The main reason for creating this application was to practice 
-reverse engineering private API and data scraping from that API.
+reverse engineering APIs and data scraping.
 
 Main features:
 - FastAPI framework
@@ -33,20 +33,17 @@ The following steps had to be taken to obtain forex data:
 
 ### Authentication
 To authenticate incoming requests, we check the `api_key` header.
- 
-## Get started
-To run the API you will need an API key from `https://www.fastforex.io/`.
-Create the `.env` file (use the `.env.dist` for reference) and add the 
-Fast Forex API key.
+Create the `.env` file (use the `.env.dist` for reference) 
+and add `API_KEY` to environment variables.
 
 ### Dependencies
 Dependency management is handled using `requirements.txt` file. 
 
 ### Docker setup
 
-1. Build a docker image: `docker build -t currency_converter_api .`
-2. Start redis server with : `docker-compose up -d --build --force-recreate currency_converter_api`
-3. Create a running container: `docker run -p 80:80 currency_converter_api`
+1. Build a docker image: `docker build -t currency_scraper_api .`
+2. Start redis server with : `docker-compose up -d --build --force-recreate currency_scraper_api`
+3. Create a running container: `docker run -p 80:80 currency_scraper_api`
 
 ### Local setup
 
