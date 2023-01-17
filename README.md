@@ -91,7 +91,7 @@ GET `/convert?amount=1000&from_currency=USD&to_currency=PLN`
    }
 }
 ```
-GET `/convert?amount=1000&from_currency=USD&to_currency=PLN`
+GET `/history?from_currency=USD&to_currency=PLN`
 ```json
 [
    {
