@@ -1,5 +1,5 @@
 # Python debug
-/currency_converter_api/debug.py
+/app/debug.py
 
 # Pycharm
 .idea/*
