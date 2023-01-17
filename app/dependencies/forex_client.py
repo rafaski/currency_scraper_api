@@ -55,10 +55,15 @@ class ForexClient:
         :return: forex response in JSON
         """
         self.params.update(parameters)
+
+        # overwriting default 5 sec timeout
+        timeout = httpx.Timeout(timeout=15.0, read=None)
+
         async with httpx.AsyncClient() as client:
             response = await client.get(
                 url=FOREX_BASE_URL,
-                params=self.params
+                params=self.params,
+                timeout=timeout
             )
             return response.json()
 
