@@ -1,5 +1,5 @@
 # Python debug
-/app/debug.py
+.app/debug.py
 
 # Pycharm
 .idea/*
