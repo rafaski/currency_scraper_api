@@ -74,7 +74,6 @@ at index page `/`.
 | 400         | bad request, please check your request    |
 | 401         | user unauthorized, check your API key     |
 | 424         | external dependency failed                |
-| 429         | rate limit violation                      |
 | 500         | internal server error, application failed |
 
 ## Examples
