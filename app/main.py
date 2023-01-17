@@ -13,6 +13,7 @@ Currency rates are provided by an external API `https://wise.com/gb/currency-con
 - Get average conversion rate from the past X days
 
 To authenticate incoming requests, we check the `api_key` header.
+Please make sure to include it when calling API.
 """
 
 app = FastAPI(
