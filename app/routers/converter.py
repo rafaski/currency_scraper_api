@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Request, Depends
 from typing import List
 
-from app.auth import verify_api_key
+from app.auth.verify import verify_api_key
+from app.auth.validate import validate_input
 from app.dependencies.forex_client import ForexClient
 
 
@@ -21,12 +22,18 @@ async def convert(
     """
     Convert an amount of one currency into another currency
     """
-    results = await ForexClient().convert_currency(
+    is_valid = validate_input(
         from_currency=from_currency,
-        to_currency=to_currency,
-        amount=amount
+        to_currency=to_currency
     )
-    return results
+    if is_valid:
+        results = await ForexClient().convert_currency(
+            from_currency=from_currency,
+            to_currency=to_currency,
+            amount=amount
+        )
+        return results
+    raise
 
 
 @router.get("/history")
@@ -39,11 +46,16 @@ async def history(
     Get historical data on currency conversion (up to 24 hours),
     hourly intervals
     """
-    results = await ForexClient().historical_data(
+    is_valid = validate_input(
         from_currency=from_currency,
         to_currency=to_currency
     )
-    return results
+    if is_valid:
+        results = await ForexClient().historical_data(
+            from_currency=from_currency,
+            to_currency=to_currency
+        )
+        return results
 
 
 @router.get("/average")
@@ -56,9 +68,14 @@ async def average(
     """
     Get average conversion rate from the past X days
     """
-    results = await ForexClient().average_rate(
+    is_valid = validate_input(
         from_currency=from_currency,
-        to_currency=to_currency,
-        duration=duration
+        to_currency=to_currency
     )
-    return results
+    if is_valid:
+        results = await ForexClient().average_rate(
+            from_currency=from_currency,
+            to_currency=to_currency,
+            duration=duration
+        )
+        return results

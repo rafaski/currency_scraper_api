@@ -1,25 +1,11 @@
 import httpx
 from datetime import datetime
-from typing import List, NoReturn
-import re
+from typing import List
 from functools import wraps
 
 from app.settings import FOREX_BASE_URL
-from app.errors import BadRequest, ForexException
-
-
-def validate_input(
-    value: str
-) -> bool | NoReturn:
-    """
-    Validate if parsed currency symbol is in valid format
-    :param value: User input of currency symbol
-    :return: True or raise BadRequest error
-    """
-    pattern = f"[A-Z][A-Z][A-Z]$"
-    if re.search(pattern=pattern, string=value) is None:
-        raise BadRequest(details="Invalid currency")
-    return True
+from app.errors import ForexException
+from app.auth.validate import validate_input
 
 
 def httpx_error_handler(func):
@@ -80,8 +66,6 @@ class ForexClient:
         :param amount: Base currency unit amount
         :return: dict with converted_amount, mid_market_rate and metadata
         """
-        validate_input(value=from_currency)
-        validate_input(value=to_currency)
 
         # additional query parameters required for this API call
         params = {
