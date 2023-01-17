@@ -1,5 +1,8 @@
 from fastapi import APIRouter, Request, Depends
+from typing import List
+
 from app.auth import verify_api_key
+from app.dependencies.forex_client import convert_currency, historical_data
 
 
 router = APIRouter(
@@ -14,29 +17,40 @@ async def convert(
     amount: int,
     from_currency: str,
     to_currency: str
-):
+) -> dict:
     """
     Convert an amount of one currency into another currency.
 
     :param request: access Request object
     :param amount: Amount of source currency to convert
-    :param from_currency: Base currency symbol
-    :param to_currency: Target currency symbol
+    :param from_currency: Base currency code
+    :param to_currency: Target currency code
     :return: The converted amount and mid-market rate
     """
-    return {"message": "Hello, world"}
+    results = convert_currency(
+        from_currency=from_currency,
+        to_currency=to_currency,
+        amount=amount
+    )
+    return results
 
 
 @router.get("/history")
 async def history(
     request: Request,
-    currency_code: str
-):
+    from_currency: str,
+    to_currency: str
+) -> List[dict]:
     """
     Get historical data on currency conversion (up to 24 hours)
 
     :param request: access Request object
-    :param currency_code: Base currency symbol
+    :param from_currency: Base currency code
+    :param to_currency: Target currency code
     :return: the rate history per hour for up to 24 hours
     """
-    return {"message": "Hello, world"}
+    results = historical_data(
+        from_currency=from_currency,
+        to_currency=to_currency
+    )
+    return results

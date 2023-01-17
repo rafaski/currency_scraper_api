@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.routers.converter import
+from app.routers.converter import router as converter_router
 
 description = """
 ### Mid-market currency converter API using FastAPI
@@ -16,3 +16,5 @@ app = FastAPI(
     docs_url="/",
     description=description
     )
+
+app.include_router(router=converter_router)
