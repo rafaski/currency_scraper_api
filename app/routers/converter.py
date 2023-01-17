@@ -19,13 +19,7 @@ async def convert(
     to_currency: str
 ) -> dict:
     """
-    Convert an amount of one currency into another currency.
-
-    :param request: access Request object
-    :param amount: Amount of source currency to convert
-    :param from_currency: Base currency code
-    :param to_currency: Target currency code
-    :return: The converted amount and mid-market rate
+    Convert an amount of one currency into another currency
     """
     results = await ForexClient().convert_currency(
         from_currency=from_currency,
@@ -42,12 +36,8 @@ async def history(
     to_currency: str
 ) -> List[dict]:
     """
-    Get historical data on currency conversion (up to 24 hours)
-
-    :param request: access Request object
-    :param from_currency: Base currency code
-    :param to_currency: Target currency code
-    :return: the rate history per hour for up to 24 hours
+    Get historical data on currency conversion (up to 24 hours),
+    hourly intervals
     """
     results = await ForexClient().historical_data(
         from_currency=from_currency,
@@ -65,12 +55,6 @@ async def average(
 ) -> dict:
     """
     Get average conversion rate from the past X days
-
-    :param request: access Request object
-    :param from_currency: Base currency code
-    :param to_currency: Target currency code
-    :param duration: X days
-    :return: average conversion rate from the past X days
     """
     results = await ForexClient().average_rate(
         from_currency=from_currency,
