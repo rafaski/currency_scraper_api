@@ -2,9 +2,7 @@ from fastapi import APIRouter, Request, Depends
 from typing import List
 
 from app.auth import verify_api_key
-from app.dependencies.forex_client import (
-    convert_currency, historical_data, average_rate
-)
+from app.dependencies.forex_client import ForexClient
 
 
 router = APIRouter(
@@ -29,7 +27,7 @@ async def convert(
     :param to_currency: Target currency code
     :return: The converted amount and mid-market rate
     """
-    results = await convert_currency(
+    results = await ForexClient().convert_currency(
         from_currency=from_currency,
         to_currency=to_currency,
         amount=amount
@@ -51,7 +49,7 @@ async def history(
     :param to_currency: Target currency code
     :return: the rate history per hour for up to 24 hours
     """
-    results = await historical_data(
+    results = await ForexClient().historical_data(
         from_currency=from_currency,
         to_currency=to_currency
     )
@@ -74,7 +72,7 @@ async def average(
     :param duration: X days
     :return: average conversion rate from the past X days
     """
-    results = await average_rate(
+    results = await ForexClient().average_rate(
         from_currency=from_currency,
         to_currency=to_currency,
         duration=duration
