@@ -27,7 +27,7 @@ async def convert(
     :param to_currency: Target currency code
     :return: The converted amount and mid-market rate
     """
-    results = convert_currency(
+    results = await convert_currency(
         from_currency=from_currency,
         to_currency=to_currency,
         amount=amount
@@ -49,7 +49,7 @@ async def history(
     :param to_currency: Target currency code
     :return: the rate history per hour for up to 24 hours
     """
-    results = historical_data(
+    results = await historical_data(
         from_currency=from_currency,
         to_currency=to_currency
     )

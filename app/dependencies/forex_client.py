@@ -1,33 +1,16 @@
 import httpx
-import asyncio
 from datetime import datetime
-import requests
-from typing import List
+from typing import List, NoReturn
+import re
+from functools import wraps
 
 from app.settings import FOREX_BASE_URL
-
-# todo: exception mapper, handling errors
+from app.errors import BadRequest, ForexException
 
 
 """
 https://fastapi.tiangolo.com/tutorial/handling-errors/
 """
-
-
-# # scraping data from forex API.
-# async def forex_request(params: dict) -> dict:
-#     """
-#     HTTP request to fetch data from forex API
-#     :param params: query parameters
-#     :return: forex response in JSON
-#     """
-#     async with httpx.AsyncClient() as client:
-#         response = await client.get(
-#             url=FOREX_BASE_URL,
-#             params=params
-#         )
-#         return response.json()
-
 
 # default query parameters
 PARAMS = {
@@ -37,23 +20,50 @@ PARAMS = {
 }
 
 
-def forex_request(parameters: dict) -> dict:
+def validate_input(
+    value: str
+) -> bool | NoReturn:
+    """
+    Validate if parsed currency symbol is in valid format
+    :param value: User input of currency symbol
+    :return: True or raise BadRequest error
+    """
+    pattern = f"[A-Z][A-Z][A-Z]$"
+    if re.search(pattern=pattern, string=value) is None:
+        raise BadRequest(details="Invalid currency")
+    return True
+
+
+def httpx_error_handler(func):
+    """
+    A generic httpx error handler
+    """
+    @wraps(func)
+    async def _http_error_handler(*args, **kwargs):
+        try:
+            return await func(*args, **kwargs)
+        except httpx.HTTPError as error:
+            raise ForexException(details=str(error))
+    return _http_error_handler
+
+
+# Data scraping from forex API
+async def forex_request(parameters: dict) -> dict:
     """
     HTTP request to fetch data from forex API
     :param parameters: query parameters
     :return: forex response in JSON
     """
     PARAMS.update(parameters)
-    response = requests.get(
-        url=FOREX_BASE_URL,
-        params=PARAMS
-    )
-    return response.json()
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            url=FOREX_BASE_URL,
+            params=PARAMS
+        )
+        return response.json()
 
-# print(asyncio.run(forex_request()))
 
-
-def convert_currency(
+async def convert_currency(
     from_currency: str,
     to_currency: str,
     amount: int
@@ -65,12 +75,15 @@ def convert_currency(
     :param amount: Base currency unit amount
     :return: dict with converted_amount, mid_market_rate and metadata
     """
+    validate_input(value=from_currency)
+    validate_input(value=to_currency)
+
     # additional query parameters required for this API call
     params = {
         "source": from_currency,
         "target": to_currency
     }
-    forex_response = forex_request(parameters=params)
+    forex_response = await forex_request(parameters=params)
 
     # scrape required data from forex response
     mid_market_rate = forex_response[-1].get("value")
@@ -90,7 +103,7 @@ def convert_currency(
     return output_format
 
 
-def historical_data(
+async def historical_data(
     from_currency: str,
     to_currency: str
 ) -> List[dict]:
@@ -100,12 +113,15 @@ def historical_data(
     :param to_currency: Target currency code
     :return: list of dictionaries with hourly conversion rate and time
     """
+    validate_input(value=from_currency)
+    validate_input(value=to_currency)
+
     # additional query parameters required for this API call
     params = {
         "source": from_currency,
         "target": to_currency
     }
-    forex_response = forex_request(parameters=params)
+    forex_response = await forex_request(parameters=params)
 
     # scrape required data from forex response
     history = []
@@ -121,11 +137,3 @@ def historical_data(
 
     return history
 
-# r = asyncio.run(convert(from_currency="USD", to_currency="PLN", amount=1000))
-
-#
-# r = convert_currency(from_currency="USD", to_currency="PLN", amount=1000)
-# b = historical_data(from_currency="USD", to_currency="PLN")
-#
-# print(r)
-# print(b)
