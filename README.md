@@ -18,7 +18,7 @@ Main features:
 - OOP where applicable
 
 ### Currency converter
-Currency rates are provided by an external API `https://wise.com/gb/currency-converter/`. 
+Currency rates are provided by an external API `https://wise.com/gb/currency-converter/`
 
 Supported operations are:
 - Convert currency
@@ -56,7 +56,7 @@ Dependency management is handled using `requirements.txt` file.
 
 ## Documentation
 Once the application is up and running, you can access FastAPI automatic docs 
-at index page `/`.
+at index page `/`
 
 ### Currency converter endpoints
 
