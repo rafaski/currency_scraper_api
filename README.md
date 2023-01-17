@@ -10,8 +10,8 @@ reverse engineering APIs and web scraping.
 Main features:
 - FastAPI framework
 - async HTTP requests using `httpx` library
-- reverse engineered currency converter API
-- web scraping
+- reverse engineered `wise.com` API
+- `wise.com` web scraping
 - authentication via API key
 - `regex` currency input validation
 - custom error handling
