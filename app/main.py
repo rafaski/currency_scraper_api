@@ -17,7 +17,7 @@ Please make sure to include it when calling this API.
 """
 
 app = FastAPI(
-    title=" Mid-market currency converter API ",
+    title="Currency Converter Data Scraper API",
     docs_url="/",
     description=description
     )

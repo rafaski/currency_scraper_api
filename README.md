@@ -5,12 +5,13 @@ This is a Currency Converter Data Scraper API
 
 ### Motives
 The main reason for creating this application was to practice 
-reverse engineering APIs and data scraping.
+reverse engineering APIs and web scraping.
 
 Main features:
 - FastAPI framework
 - async HTTP requests using `httpx` library
 - reverse engineered forex API
+- web scraping
 - authentication via API key
 - `regex` currency input validation
 - custom error handling
