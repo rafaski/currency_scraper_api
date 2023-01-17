@@ -106,7 +106,7 @@ GET `/convert?amount=1000&from_currency=USD&to_currency=PLN`
    }
 ]
 ```
-GET `average?from_currency=USD&to_currency=PLN&duration=30`
+GET `/average?from_currency=USD&to_currency=PLN&duration=30`
 ```json
 {
 	"average_rate": 4.3832,
