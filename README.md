@@ -26,7 +26,7 @@ Supported operations are:
 - Get average conversion rate from the past X days
 
 ### Reverse engineering API
-The following steps had to be taken to obtain Wise data:
+The following steps had to be taken to obtain `wise.com` data:
 
 1. Inspecting HTTP requests from `wise.com` API
 2. Identifying requests responsible for sending JSON response
