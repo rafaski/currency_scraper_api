@@ -33,7 +33,6 @@ async def convert(
             amount=amount
         )
         return results
-    raise
 
 
 @router.get("/history")

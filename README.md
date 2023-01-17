@@ -28,12 +28,12 @@ Supported operations are:
 ### Reverse engineering API
 The following steps had to be taken to obtain Wise data:
 
-1. Inspecting HTTP requests from `Wise` API
+1. Inspecting HTTP requests from `wise.com` API
 2. Identifying requests responsible for sending JSON response
 3. Importing and converting cURL to HTTP request in `Postman`
 4. Testing API call in `Postman`
 5. Identifying query parameters and headers
-6. Transferring `Wise` API calls to `python`
+6. Transferring `wise.com` API calls to `python`
 7. Making async HTTP requests with `httpx`
 
 ### Authentication

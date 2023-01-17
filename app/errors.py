@@ -34,12 +34,6 @@ class Unauthorized(ApiException):
     details: str = "Invalid API key"
 
 
-class Forbidden(ApiException):
-    http_status_code: status = status.HTTP_403_FORBIDDEN
-    error_type: ErrorTypes = ErrorTypes.FORBIDDEN
-    details: str = "Access forbidden"
-
-
 class BadRequest(ApiException):
     http_status_code: status = status.HTTP_400_BAD_REQUEST
     error_type: ErrorTypes = ErrorTypes.BAD_REQUEST
