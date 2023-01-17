@@ -10,7 +10,7 @@ reverse engineering APIs and web scraping.
 Main features:
 - FastAPI framework
 - async HTTP requests using `httpx` library
-- reverse engineered forex API
+- reverse engineered currency converter API
 - web scraping
 - authentication via API key
 - `regex` currency input validation
@@ -26,14 +26,14 @@ Supported operations are:
 - Get average conversion rate from the past X days
 
 ### Reverse engineering API
-The following steps had to be taken to obtain forex data:
+The following steps had to be taken to obtain Wise data:
 
-1. Inspecting HTTP requests from forex API
+1. Inspecting HTTP requests from `Wise` API
 2. Identifying requests responsible for sending JSON response
 3. Importing and converting cURL to HTTP request in `Postman`
 4. Testing API call in `Postman`
 5. Identifying query parameters and headers
-6. Transferring forex API calls to `python`
+6. Transferring `Wise` API calls to `python`
 7. Making async HTTP requests with `httpx`
 
 ### Authentication
