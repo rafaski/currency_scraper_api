@@ -1,7 +1,7 @@
 # Currency Converter Data Scraper API
 
 ## Overview
-This is a mid-market currency converter API using FastAPI
+This is a Currency Converter Data Scraper API
 
 ### Motives
 The main reason for creating this application was to practice 
@@ -13,6 +13,7 @@ Main features:
 - reverse engineered forex API
 - authentication via API key
 - `regex` currency input validation
+- custom error handling
 
 ### Currency converter
 Currency rates are provided by an external API `https://wise.com/gb/currency-converter/`. 
@@ -43,7 +44,7 @@ Dependency management is handled using `requirements.txt` file.
 ### Docker setup
 
 1. Build a docker image: `docker build -t currency_scraper_api .`
-2. Create a running container: `docker run -p 80:80 currency_scraper_api`
+2. Create a running container: `docker run -p 8080:8080 currency_scraper_api`
 
 ### Local setup
 
