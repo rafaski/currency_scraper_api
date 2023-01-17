@@ -46,7 +46,7 @@ class BadRequest(ApiException):
     details: str = "Bad request"
 
 
-class ForexException(AppException):
+class ConverterException(AppException):
     http_status_code: status = status.HTTP_424_FAILED_DEPENDENCY
-    error_type: ErrorTypes = ErrorTypes.FOREX_ERROR
+    error_type: ErrorTypes = ErrorTypes.CONVERTER_ERROR
     details: str = "Unknown forex exception occurred"

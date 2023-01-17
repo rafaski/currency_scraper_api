@@ -15,5 +15,5 @@ class ErrorTypes(str, Enum):
     BAD_REQUEST = "bad_request"
 
     # Forex errors
-    FOREX_ERROR = "forex_error"
+    CONVERTER_ERROR = "converter_error"
 

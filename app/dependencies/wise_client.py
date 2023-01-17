@@ -3,9 +3,8 @@ from datetime import datetime
 from typing import List
 from functools import wraps
 
-from app.settings import FOREX_BASE_URL
-from app.errors import ForexException
-from app.auth.validate import validate_input
+from app.settings import WISE_BASE_URL
+from app.errors import ConverterException
 
 
 def httpx_error_handler(func):
@@ -17,13 +16,13 @@ def httpx_error_handler(func):
         try:
             return await func(*args, **kwargs)
         except httpx.HTTPError as error:
-            raise ForexException(details=str(error))
+            raise ConverterException(details=str(error))
     return _http_error_handler
 
 
-class ForexClient:
+class WiseClient:
     """
-    class wrapper over forex HTTP requests
+    Class wrapper over currency converter HTTP requests
     """
 
     # default query parameters
@@ -34,7 +33,7 @@ class ForexClient:
     }
 
     @httpx_error_handler
-    async def forex_request(self, parameters: dict) -> dict:
+    async def converter_request(self, parameters: dict) -> dict:
         """
         HTTP request to fetch data from forex API
         :param parameters: query parameters
@@ -47,7 +46,7 @@ class ForexClient:
 
         async with httpx.AsyncClient() as client:
             response = await client.get(
-                url=FOREX_BASE_URL,
+                url=WISE_BASE_URL,
                 params=self.params,
                 timeout=timeout
             )
@@ -72,12 +71,12 @@ class ForexClient:
             "source": from_currency,
             "target": to_currency
         }
-        forex_response = await self.forex_request(parameters=params)
+        client_response = await self.converter_request(parameters=params)
 
         # scrape required data from forex response
-        mid_market_rate = forex_response[-1].get("value")
+        mid_market_rate = client_response[-1].get("value")
         converted_amount = round(amount * mid_market_rate, 2)
-        datetime_int = forex_response[-1].get("time")
+        datetime_int = client_response[-1].get("time")
         datetime_object = datetime.fromtimestamp(round(datetime_int/1000))
 
         output_format = {
@@ -102,21 +101,18 @@ class ForexClient:
         :param to_currency: Target currency code
         :return: list of dictionaries with hourly conversion rate and time
         """
-        validate_input(value=from_currency)
-        validate_input(value=to_currency)
-
         # additional query parameters required for this API call
         params = {
             "source": from_currency,
             "target": to_currency
         }
-        forex_response = await self.forex_request(parameters=params)
+        client_response = await self.converter_request(parameters=params)
 
         # scrape required data from forex response
         history = []
-        for i in range(len(forex_response)):
-            mid_market_rate = forex_response[i].get("value")
-            datetime_str = forex_response[i].get("time")
+        for i in range(len(client_response)):
+            mid_market_rate = client_response[i].get("value")
+            datetime_str = client_response[i].get("time")
             datetime_object = datetime.fromtimestamp(round(datetime_str / 1000))
             historical_output = {
                 "rate": mid_market_rate,
@@ -139,9 +135,6 @@ class ForexClient:
         :param duration: X days
         :return: average conversion rate from the past X days
         """
-        validate_input(value=from_currency)
-        validate_input(value=to_currency)
-
         # additional query parameters required for this API call
         params = {
             "source": from_currency,
@@ -150,14 +143,14 @@ class ForexClient:
             "resolution": "daily",
             "unit": "day"
         }
-        forex_response = await self.forex_request(parameters=params)
+        client_response = await self.converter_request(parameters=params)
 
         # scrape required data from forex response
         average = 0
-        for i in range(len(forex_response)):
-            mid_market_rate = forex_response[i].get("value")
+        for i in range(len(client_response)):
+            mid_market_rate = client_response[i].get("value")
             average += mid_market_rate
-        average = round(average/len(forex_response), 4)
+        average = round(average/len(client_response), 4)
 
         output_format = {
             "average_rate": average,

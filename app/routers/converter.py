@@ -3,7 +3,7 @@ from typing import List
 
 from app.auth.verify import verify_api_key
 from app.auth.validate import validate_input
-from app.dependencies.forex_client import ForexClient
+from app.dependencies.wise_client import WiseClient
 
 
 router = APIRouter(
@@ -27,7 +27,7 @@ async def convert(
         to_currency=to_currency
     )
     if is_valid:
-        results = await ForexClient().convert_currency(
+        results = await WiseClient().convert_currency(
             from_currency=from_currency,
             to_currency=to_currency,
             amount=amount
@@ -51,7 +51,7 @@ async def history(
         to_currency=to_currency
     )
     if is_valid:
-        results = await ForexClient().historical_data(
+        results = await WiseClient().historical_data(
             from_currency=from_currency,
             to_currency=to_currency
         )
@@ -73,7 +73,7 @@ async def average(
         to_currency=to_currency
     )
     if is_valid:
-        results = await ForexClient().average_rate(
+        results = await WiseClient().average_rate(
             from_currency=from_currency,
             to_currency=to_currency,
             duration=duration
