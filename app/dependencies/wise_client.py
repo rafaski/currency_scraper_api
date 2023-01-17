@@ -73,7 +73,7 @@ class WiseClient:
         }
         client_response = await self.converter_request(parameters=params)
 
-        # scrape required data from forex response
+        # get required data from client's response
         mid_market_rate = client_response[-1].get("value")
         converted_amount = round(amount * mid_market_rate, 2)
         datetime_int = client_response[-1].get("time")
@@ -108,7 +108,7 @@ class WiseClient:
         }
         client_response = await self.converter_request(parameters=params)
 
-        # scrape required data from forex response
+        # get required data from client's response
         history = []
         for i in range(len(client_response)):
             mid_market_rate = client_response[i].get("value")
@@ -119,7 +119,6 @@ class WiseClient:
                 "time": str(datetime_object)
             }
             history.append(historical_output)
-
         return history
 
     async def average_rate(
@@ -145,7 +144,7 @@ class WiseClient:
         }
         client_response = await self.converter_request(parameters=params)
 
-        # scrape required data from forex response
+        # get required data from client's response
         average = 0
         for i in range(len(client_response)):
             mid_market_rate = client_response[i].get("value")
