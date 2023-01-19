@@ -117,12 +117,12 @@ class WiseClient:
             datetime_str = client_response[i].get("time")
             # rounded only for the visual aspect, to be amended for production
             datetime_object = datetime.fromtimestamp(round(datetime_str / 1000))
-            historical_output = {
+            output_format = {
                 "rate": mid_market_rate,
                 # datetime object to string for visual presentation only
                 "time": str(datetime_object)
             }
-            history.append(historical_output)
+            history.append(output_format)
         return history
 
     async def average_rate(

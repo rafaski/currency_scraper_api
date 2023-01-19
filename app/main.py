@@ -5,7 +5,8 @@ from app.routers.converter import router as converter_router
 description = """
 ## Currency Converter Data Scraper API
 
-Currency rates are provided by an external API `https://wise.com/gb/currency-converter/`. 
+Currency rates are provided by an external API 
+`https://wise.com/gb/currency-converter/`. 
 
 ### Supported operations are:
 - Convert currency
