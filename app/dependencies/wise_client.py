@@ -75,6 +75,7 @@ class WiseClient:
 
         # get required data from client's response
         mid_market_rate = client_response[-1].get("value")
+        # rounded only for visual presentation, to be amended for production
         converted_amount = round(amount * mid_market_rate, 2)
         datetime_int = client_response[-1].get("time")
         datetime_object = datetime.fromtimestamp(round(datetime_int/1000))
@@ -83,6 +84,7 @@ class WiseClient:
             "converted_amount": converted_amount,
             "mid_market_rate": mid_market_rate,
             "metadata": {
+                # datetime object to string for visual presentation only
                 "time_of_conversion": str(datetime_object),
                 "from_currency": from_currency,
                 "to_currency": to_currency
@@ -113,9 +115,11 @@ class WiseClient:
         for i in range(len(client_response)):
             mid_market_rate = client_response[i].get("value")
             datetime_str = client_response[i].get("time")
+            # rounded only for the visual aspect, to be amended for production
             datetime_object = datetime.fromtimestamp(round(datetime_str / 1000))
             historical_output = {
                 "rate": mid_market_rate,
+                # datetime object to string for visual presentation only
                 "time": str(datetime_object)
             }
             history.append(historical_output)
@@ -149,6 +153,7 @@ class WiseClient:
         for i in range(len(client_response)):
             mid_market_rate = client_response[i].get("value")
             average += mid_market_rate
+        # rounded only for visual presentation, to be amended for production
         average = round(average/len(client_response), 4)
 
         output_format = {
