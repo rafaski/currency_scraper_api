@@ -20,3 +20,7 @@ WISE_BASE_URL = load_variable(
     name="WISE_BASE_URL",
     default="https://wise.com/rates/history+live"
 )
+WISE_CURRENCIES_URL = load_variable(
+    name="WISE_CURRENCIES_URL",
+    default="https://wise.com/gb/currency-converter/currencies"
+)

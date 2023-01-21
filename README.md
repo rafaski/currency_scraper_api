@@ -11,7 +11,7 @@ Main features:
 - FastAPI framework
 - async HTTP requests using `httpx` library
 - reverse engineered `wise.com` API
-- `wise.com` web scraping
+- `wise.com` web scraping with `BeautifulSoup`
 - authentication via API key
 - `regex` currency input validation
 - custom error handling
@@ -21,6 +21,7 @@ Main features:
 Currency rates are provided by an external API `https://wise.com/gb/currency-converter/`
 
 Supported operations are:
+- Get a list of all supported currencies
 - Convert currency
 - Get historical data of conversion rates
 - Get average conversion rate from the past X days
@@ -35,6 +36,11 @@ The following steps had to be taken to obtain `wise.com` data:
 5. Identifying query parameters and headers
 6. Transferring `wise.com` API calls to `python`
 7. Making async HTTP requests with `httpx`
+
+### Web scraping
+The list of all supported currency codes in `/currencies` endpoint was scraped 
+using `BeautifulSoup` framework. 
+All user currency input is validated against that list.
 
 ### Authentication
 To authenticate incoming requests, we check the `api_key` header.
@@ -60,11 +66,12 @@ at index page `/`
 
 ### Currency converter endpoints
 
-| Method | Endpoint | Description                                |
-|--------|----------|--------------------------------------------|
-| GET    | /convert | convert one currency into another currency |       
-| GET    | /history | get historical exchange rates              |
-| GET    | /average | get average exchange rate from past X days |
+| Method | Endpoint    | Description                                |
+|--------|-------------|--------------------------------------------|
+| GET    | /currencies | get a list of all supported currencies     | 
+| GET    | /convert    | convert one currency into another currency |  
+| GET    | /history    | get historical exchange rates              |
+| GET    | /average    | get average exchange rate from past X days |
 
 ## Status codes
 
@@ -77,7 +84,17 @@ at index page `/`
 | 500         | internal server error, application failed |
 
 ## Examples
-
+GET `/currencies`
+```json
+[
+    "AED",
+    "ALL",
+    "AMD",
+    "ANG",
+    "AOA",
+    "ARS"
+]
+```
 GET `/convert?amount=1000&from_currency=USD&to_currency=PLN`
 ```json
 {

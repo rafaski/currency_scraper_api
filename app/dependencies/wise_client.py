@@ -2,8 +2,10 @@ import httpx
 from datetime import datetime
 from typing import List
 from functools import wraps
+from bs4 import BeautifulSoup
 
 from app.settings import WISE_BASE_URL
+from app.settings import WISE_CURRENCIES_URL
 from app.errors import ConverterException
 
 
@@ -33,10 +35,15 @@ class WiseClient:
     }
 
     @httpx_error_handler
-    async def converter_request(self, parameters: dict) -> dict:
+    async def converter_request(
+        self,
+        parameters: dict,
+        url: str = WISE_BASE_URL
+    ) -> dict:
         """
-        HTTP request to fetch data from forex API
+        HTTP requests to fetch data from wise.com API
         :param parameters: query parameters
+        :param url: base request URL
         :return: forex response in JSON
         """
         self.params.update(parameters)
@@ -46,11 +53,32 @@ class WiseClient:
 
         async with httpx.AsyncClient() as client:
             response = await client.get(
-                url=WISE_BASE_URL,
+                url=url,
                 params=self.params,
                 timeout=timeout
             )
-            return response.json()
+            return response
+
+    async def currencies(self) -> list:
+        """
+        Get a list of supported currency codes
+        :return: list of currency codes
+        """
+        self.params = {}
+        client_response = await self.converter_request(
+            parameters=self.params,
+            url=WISE_CURRENCIES_URL
+        )
+
+        # data scraping
+        doc = BeautifulSoup(client_response.content, "html.parser")
+        all_codes = doc.find_all(
+            class_="currencies_currencyCard__currencyCode__RG8bp"
+        )
+        codes = []
+        for item in all_codes:
+            codes.append(item.text)
+        return codes
 
     async def convert_currency(
         self,
@@ -72,6 +100,7 @@ class WiseClient:
             "target": to_currency
         }
         client_response = await self.converter_request(parameters=params)
+        client_response = client_response.json()
 
         # get required data from client's response
         mid_market_rate = client_response[-1].get("value")
@@ -108,6 +137,7 @@ class WiseClient:
             "target": to_currency
         }
         client_response = await self.converter_request(parameters=params)
+        client_response = client_response.json()
 
         # get required data from client's response
         history = []
@@ -145,6 +175,7 @@ class WiseClient:
             "unit": "day"
         }
         client_response = await self.converter_request(parameters=params)
+        client_response = client_response.json()
 
         # get required data from client's response
         average = 0

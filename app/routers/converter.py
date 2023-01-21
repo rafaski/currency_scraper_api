@@ -12,6 +12,15 @@ router = APIRouter(
     )
 
 
+@router.get("/currencies")
+async def currencies(request: Request) -> list:
+    """
+    Get a list of all supported currencies
+    """
+    results = await WiseClient().currencies()
+    return results
+
+
 @router.get("/convert")
 async def convert(
     request: Request,
