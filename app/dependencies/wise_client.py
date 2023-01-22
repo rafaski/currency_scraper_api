@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import List
 from functools import wraps
 from bs4 import BeautifulSoup
+from collections import OrderedDict
 
 from app.settings import WISE_BASE_URL
 from app.settings import WISE_CURRENCIES_URL
@@ -59,7 +60,7 @@ class WiseClient:
             )
             return response
 
-    async def currencies(self) -> list:
+    async def currencies(self) -> dict:
         """
         Get a list of supported currency codes
         :return: list of currency codes
@@ -75,9 +76,12 @@ class WiseClient:
         all_codes = doc.find_all(
             class_="currencies_currencyCard__currencyCode__RG8bp"
         )
-        codes = []
-        for item in all_codes:
-            codes.append(item.text)
+        all_names = doc.find_all(
+            class_="currencies_currencyCard__currencyName__wj5_u"
+        )
+        codes = OrderedDict()
+        for name, code in zip(all_names, all_codes):
+            codes[code.text] = name.text
         return codes
 
     async def convert_currency(
@@ -104,7 +108,7 @@ class WiseClient:
 
         # get required data from client's response
         mid_market_rate = client_response[-1].get("value")
-        converted_amount = format(amount * mid_market_rate, "0.2f")
+        converted_amount = round(amount * mid_market_rate, 2)
         datetime_int = client_response[-1].get("time")
         datetime_object = datetime.fromtimestamp(round(datetime_int/1000))
 
@@ -182,7 +186,7 @@ class WiseClient:
         for i in range(len(client_response)):
             mid_market_rate = client_response[i].get("value")
             average += mid_market_rate
-        average = format(average/len(client_response), "0.4f")
+        average = round(average/len(client_response), 4)
 
         output_format = {
             "average_rate": average,

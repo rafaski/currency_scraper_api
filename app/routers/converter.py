@@ -13,7 +13,7 @@ router = APIRouter(
 
 
 @router.get("/currencies")
-async def currencies(request: Request) -> list:
+async def currencies(request: Request) -> dict:
     """
     Get a list of all supported currencies
     """

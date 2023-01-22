@@ -38,8 +38,8 @@ The following steps had to be taken to obtain `wise.com` data:
 7. Making async HTTP requests with `httpx`
 
 ### Web scraping
-The list of all supported currency codes in `/currencies` endpoint was scraped 
-using `BeautifulSoup` framework. 
+The list of all supported currency names and codes in `/currencies` endpoint 
+was scraped using `BeautifulSoup` framework. 
 All user currency input is validated against that list.
 
 ### Authentication
@@ -86,14 +86,14 @@ at index page `/`
 ## Examples
 GET `/currencies`
 ```json
-[
-    "AED",
-    "ALL",
-    "AMD",
-    "ANG",
-    "AOA",
-    "ARS"
-]
+{
+  "AED": "United Arab Emirates Dirham",
+  "ALL": "Albanian Lek",
+  "AMD": "Armenian Dram",
+  "ANG": "Netherlands Antillean Guilder",
+  "AOA": "Angolan Kwanza",
+  "ARS": "Argentine Peso"
+}
 ```
 GET `/convert?amount=1000&from_currency=USD&to_currency=PLN`
 ```json

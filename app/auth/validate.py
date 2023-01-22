@@ -23,8 +23,8 @@ async def validate_input(
     if any([
         re.fullmatch(pattern=pattern, string=from_currency) is None,
         re.fullmatch(pattern=pattern, string=to_currency) is None,
-        from_currency not in list_of_currencies,
-        to_currency not in list_of_currencies
+        from_currency not in list_of_currencies.keys(),
+        to_currency not in list_of_currencies.keys()
     ]):
         raise BadRequest(details="Invalid currency")
     return True

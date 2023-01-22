@@ -15,7 +15,7 @@ def load_variable(name: str, default: Any = None) -> str:
 # access api key
 API_KEY = load_variable(name="API_KEY")
 
-# forex base url
+# wise base url
 WISE_BASE_URL = load_variable(
     name="WISE_BASE_URL",
     default="https://wise.com/rates/history+live"
