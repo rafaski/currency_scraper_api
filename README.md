@@ -13,6 +13,7 @@ Main features:
 - reverse engineered `wise.com` API
 - `wise.com` web scraping with `BeautifulSoup`
 - authentication via API key
+- `pydantic` data modelling and validation
 - `regex` currency input validation
 - custom error handling
 - OOP where applicable
@@ -21,10 +22,11 @@ Main features:
 Currency rates are provided by an external API `https://wise.com/gb/currency-converter/`
 
 Supported operations are:
-- Get a list of all supported currencies
-- Convert currency
-- Get historical data of conversion rates
-- Get average conversion rate from the past X days
+- get a list of all supported currencies 
+- convert one currency into another currency
+- get historical exchange rates
+- get a list of all currency conversions
+- get average exchange rate from past X days
 
 ### Reverse engineering API
 The following steps had to be taken to obtain `wise.com` data:
@@ -66,12 +68,13 @@ at index page `/`
 
 ### Currency converter endpoints
 
-| Method | Endpoint    | Description                                |
-|--------|-------------|--------------------------------------------|
-| GET    | /currencies | get a list of all supported currencies     | 
-| GET    | /convert    | convert one currency into another currency |  
-| GET    | /history    | get historical exchange rates              |
-| GET    | /average    | get average exchange rate from past X days |
+| Method | Endpoint       | Description                                |
+|--------|----------------|--------------------------------------------|
+| GET    | /currencies    | get a list of all supported currencies     | 
+| GET    | /convert       | convert one currency into another currency |  
+| GET    | /history       | get historical exchange rates              |
+| GET    | /all_requests  | get a list of all currency conversions     |
+| GET    | /average       | get average exchange rate from past X days |
 
 ## Status codes
 

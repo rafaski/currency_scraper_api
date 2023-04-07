@@ -4,7 +4,7 @@ from typing import List
 from app.auth.verify import verify_api_key
 from app.auth.validate import validate_input
 from app.dependencies.wise_client import WiseClient
-
+from app import schemas
 
 router = APIRouter(
     tags=["converter"],
@@ -27,7 +27,7 @@ async def convert(
     amount: int,
     from_currency: str,
     to_currency: str
-) -> dict:
+) -> schemas.ConvertCurrency:
     """
     Convert an amount of one currency into another currency
     """
@@ -44,12 +44,12 @@ async def convert(
         return results
 
 
-@router.get("/history")
-async def history(
+@router.get("/historical_rates")
+async def get_historical_rates(
     request: Request,
     from_currency: str,
     to_currency: str
-) -> List[dict]:
+) -> List[schemas.HistoricalRates]:
     """
     Get historical data on currency conversion (up to 24 hours),
     hourly intervals
@@ -66,13 +66,24 @@ async def history(
         return results
 
 
+@router.get("/all_requests")
+async def get_all_requests(
+    request: Request
+) -> List[dict]:
+    """
+    Get a list of all currency conversions that you've requested so fat
+    """
+    all_requests = WiseClient.all_requests
+    return all_requests
+
+
 @router.get("/average")
 async def average(
     request: Request,
     from_currency: str,
     to_currency: str,
     duration: int
-) -> dict:
+) -> schemas.AverageRate:
     """
     Get average conversion rate from the past X days
     """

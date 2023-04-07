@@ -8,6 +8,7 @@ from collections import OrderedDict
 from app.settings import WISE_BASE_URL
 from app.settings import WISE_CURRENCIES_URL
 from app.errors import ConverterException
+from app import schemas
 
 
 def httpx_error_handler(func):
@@ -34,6 +35,8 @@ class WiseClient:
         "resolution": "hourly",
         "unit": "day"
     }
+
+    all_requests = []
 
     @httpx_error_handler
     async def converter_request(
@@ -89,7 +92,7 @@ class WiseClient:
         from_currency: str,
         to_currency: str,
         amount: int
-    ) -> dict:
+    ) -> schemas.ConvertCurrency:
         """
         Convert an amount of one currency into another currency
         :param from_currency: Source currency code
@@ -112,23 +115,25 @@ class WiseClient:
         datetime_int = client_response[-1].get("time")
         datetime_object = datetime.fromtimestamp(round(datetime_int/1000))
 
-        output_format = {
-            "converted_amount": converted_amount,
-            "mid_market_rate": mid_market_rate,
-            "metadata": {
-                # datetime object to string for visual presentation only
-                "time_of_conversion": str(datetime_object),
-                "from_currency": from_currency,
-                "to_currency": to_currency
-            }
-        }
-        return output_format
+        results = schemas.ConvertCurrency(
+            converted_amount=converted_amount,
+            mid_market_rate=mid_market_rate,
+            metadata=schemas.Metadata(
+                time_of_conversion=str(datetime_object),
+                from_currency=from_currency,
+                to_currency=to_currency
+            )
+        )
+
+        self.all_requests.append(results)
+
+        return results
 
     async def historical_data(
         self,
         from_currency: str,
         to_currency: str
-    ) -> List[dict]:
+    ) -> List[schemas.HistoricalRates]:
         """
         The rate history per hour for up to 24 hours
         :param from_currency: Source currency code
@@ -144,25 +149,24 @@ class WiseClient:
         client_response = client_response.json()
 
         # get required data from client's response
-        history = []
+        results = []
         for i in range(len(client_response)):
             mid_market_rate = client_response[i].get("value")
             datetime_str = client_response[i].get("time")
             datetime_object = datetime.fromtimestamp(round(datetime_str / 1000))
-            output_format = {
-                "rate": mid_market_rate,
-                # datetime object to string for visual presentation only
-                "time": str(datetime_object)
-            }
-            history.append(output_format)
-        return history
+            result = schemas.HistoricalRates(
+                rate=mid_market_rate,
+                time=str(datetime_object)
+            )
+            results.append(result)
+        return results
 
     async def average_rate(
         self,
         from_currency: str,
         to_currency: str,
         duration: int
-    ) -> dict:
+    ) -> schemas.AverageRate:
         """
         Get average conversion rate from the past X days
         :param from_currency: Source currency code
@@ -188,9 +192,9 @@ class WiseClient:
             average += mid_market_rate
         average = round(average/len(client_response), 4)
 
-        output_format = {
-            "average_rate": average,
-            "duration_in_days": duration
-        }
-        return output_format
+        results = schemas.AverageRate(
+            average_rate=average,
+            duration_in_days=duration
+        )
+        return results
 

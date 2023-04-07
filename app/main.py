@@ -9,9 +9,11 @@ Currency rates are provided by an external API
 `https://wise.com/gb/currency-converter/`. 
 
 ### Supported operations are:
-- Convert currency
-- Get historical data of conversion rates
-- Get average conversion rate from the past X days
+- get a list of all supported currencies 
+- convert one currency into another currency
+- get historical exchange rates
+- get a list of all currency conversions
+- get average exchange rate from past X days
 
 To authenticate incoming requests, we check the `api_key` header.
 Please make sure to include it when calling this API.
