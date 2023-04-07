@@ -127,6 +127,30 @@ GET `/history?from_currency=USD&to_currency=PLN`
    }
 ]
 ```
+GET `/all_requests`
+```json
+[
+    {
+        "converted_amount": 4296.75,
+        "mid_market_rate": 4.29675,
+        "metadata": {
+            "time_of_conversion": "2023-04-07 14:45:38",
+            "from_currency": "USD",
+            "to_currency": "PLN"
+        }
+    },
+    {
+        "converted_amount": 1089.6,
+        "mid_market_rate": 1.0896,
+        "metadata": {
+            "time_of_conversion": "2023-04-07 14:46:38",
+            "from_currency": "EUR",
+            "to_currency": "USD"
+        }
+    }
+]
+```
+
 GET `/average?from_currency=USD&to_currency=PLN&duration=30`
 ```json
 {
