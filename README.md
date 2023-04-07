@@ -50,24 +50,21 @@ Create the `.env` file (use the `.env.dist` for reference)
 and add `API_KEY` to environment variables.
 
 ### Dependencies
-Dependency management is handled using `requirements.txt` file. 
+Dependency management is handled using `requirements.txt` file.
 
 ### Docker setup
+1. Start the application by running the following command `docker-compose up --build`
+2. You can access the application at `http://localhost:8080`
 
-1. Build a docker image: `docker build -t currency_scraper_api .`
-2. Create a running container: `docker run -p 8080:8080 currency_scraper_api`
-
-### Local setup
-
-1. Install dependencies from `requirements.txt` file
-2. Run the app: `uvicorn app.main:app --reload`
+### Without Docker setup
+1. Install dependencies from `requirements.txt`
+2. Run the app: `uvicorn app.main:app --host 127.0.0.1 --port 8080 --reload`
 
 ## Documentation
 Once the application is up and running, you can access FastAPI automatic docs 
 at index page `/`
 
 ### Currency converter endpoints
-
 | Method | Endpoint       | Description                                |
 |--------|----------------|--------------------------------------------|
 | GET    | /currencies    | get a list of all supported currencies     | 
@@ -77,7 +74,6 @@ at index page `/`
 | GET    | /average       | get average exchange rate from past X days |
 
 ## Status codes
-
 | Status code | Description                               |
 |-------------|-------------------------------------------|
 | 200         | success                                   |
