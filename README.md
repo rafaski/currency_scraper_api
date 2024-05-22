@@ -1,4 +1,4 @@
-# Currency Converter Data Scraper API
+# Currency Converter Scraper API
 
 ## Overview
 This is a Currency Converter Data Scraper API
